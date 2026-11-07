@@ -1,9 +1,37 @@
-# 02 - Power Query
+# 02 - Power Query Aplicado: Pipeline de Ingestão e ETL em Linguagem M
 
-## Objetivo
-Limpar, transformar e consolidar as fontes brutas de descrições de vagas e exigências em portais de emprego utilizando o Power Query (linguagem M).
+**Disciplina:** Microinformática Aplicada (ILP590) — FATEC São Paulo  
+**Docente:** Prof. Carlos Henrique Veríssimo Pereira  
+**Equipe 17:** Nathan Campos Nagano (RA 0020482511012) & Matheus Guides Rubim Fonseca (RA 0020482511028)  
 
-## Artefatos Esperados
-- Planilha com consultas estruturadas no Power Query
-- Scripts em Linguagem M (`.pq`)
-- Documentação/evidências das etapas aplicadas de transformação e reconciliação
+---
+
+## 📌 Objetivo da Etapa 2
+Automatizar a ingestão, limpeza, transformação e separação dimensional de dados por meio do Power Query (Linguagem M). As regras manuais da Etapa 1 são transformadas em um fluxo contínuo e repetível, com isolamento estrito de exceções na tabela `Rejeitados`.
+
+---
+
+## 📂 Arquivos Entregues
+
+1. **`Recrutamento_02_PowerQuery.xlsx`** *(Projeto Próprio — Equipe 17)*
+   - Consultas implementadas:
+     - `fVagas`: Tabela fato contendo 11 vagas válidas saneadas.
+     - `dCargo`, `dTecnologia`, `dEmpresa`: Tabelas dimensão normalizadas.
+     - `Rejeitados`: Tabela com as 9 linhas descartadas (datas inválidas, nulos, empresas não mapeadas) com respectivo motivo de rejeição.
+     - `Conferencia`: Painel de conferência com conciliação exata: $Linhas_{Entrada} (20) = fVagas (11) + Rejeitados (9)$ — **Diferença = 0**.
+
+2. **`CafeData_02_PowerQuery.xlsx`** *(Gabarito Oficial Benchmark — CaféData Brasil)*
+   - Pipeline de ingestão consolidado com leitura automatizada das filiais (F01 e F02), tabela `fVendas`, dimensões `dProduto`, `dFilial`, `fMetas`, `Rejeitados` e painel `Conferencia`.
+
+3. **`scripts_m/`** *(Scripts em Linguagem M exportados)*
+   - `fVagas.m` e `fVagas.pq`: Pipeline de ingestão e transformação das vagas.
+   - `fVendas.m` e `fVendas.pq`: Ingestão de vendas e regras de tipagem com `pt-BR`.
+   - `fMetas.m` e `fMetas.pq`: Pipeline de unpivot e metas mensais.
+
+---
+
+## ⚙️ Regras do Pipeline M Implementadas
+- Tipagem explícita com cultura regional: `Currency.Type`, `Int64.Type`, `Date.Type` (`"pt-BR"`).
+- Limpeza de caracteres não imprimíveis e espaços duplos (`Text.Trim`, `Text.Clean`).
+- Desduplicação em duas passagens para garantir integridade da chave primária.
+- Auditoria de nulos e exclusão condicional para roteamento para `Rejeitados`.

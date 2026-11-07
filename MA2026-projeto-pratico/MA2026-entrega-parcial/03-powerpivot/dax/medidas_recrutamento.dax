@@ -1,0 +1,42 @@
+/* ====================================================================
+   MEDIDAS DAX — PROJETO PAINEL DE DECISÃO PARA RECRUTAMENTO DE ENTRADA
+   Equipe: Nathan Campos Nagano e Matheus Guides Rubim Fonseca
+   FATEC São Paulo — Microinformática Aplicada (ILP590)
+   ==================================================================== */
+
+Total de Vagas := 
+COUNTROWS ( fVagas )
+
+Ticket Salarial Médio := 
+AVERAGE ( fVagas[Salario_Oferecido] )
+
+Média de Tecnologias Exigidas := 
+AVERAGE ( fVagas[Qtd_Tecnologias] )
+
+Salário Médio Júnior := 
+CALCULATE ( 
+    AVERAGE ( fVagas[Salario_Oferecido] ), 
+    RELATED ( dCargo[Senioridade] ) = "Júnior" 
+)
+
+Média Techs Júnior := 
+CALCULATE ( 
+    AVERAGE ( fVagas[Qtd_Tecnologias] ), 
+    RELATED ( dCargo[Senioridade] ) = "Júnior" 
+)
+
+Vagas Falso Júnior := 
+CALCULATE ( 
+    COUNTROWS ( fVagas ), 
+    fVagas[Qtd_Tecnologias] > 3, 
+    RELATED ( dCargo[Senioridade] ) = "Júnior" 
+)
+
+Taxa de Requisitos Inflacionados := 
+DIVIDE ( 
+    [Vagas Falso Júnior], 
+    CALCULATE ( COUNTROWS ( fVagas ), RELATED ( dCargo[Senioridade] ) = "Júnior" ) 
+)
+
+Salário por Tecnologia Exigida := 
+DIVIDE ( [Ticket Salarial Médio], [Média de Tecnologias Exigidas] )

@@ -1,18 +1,47 @@
-# 03 - Power Pivot & DAX
+# 03 - Power Pivot & DAX: Modelagem Dimensional Star Schema
 
-## Objetivo
-Modelar o banco de dados dimensional (*Star Schema* / Esquema Estrela) no Power Pivot e desenvolver os KPIs analíticos via linguagem DAX.
+**Disciplina:** Microinformática Aplicada (ILP590) — FATEC São Paulo  
+**Docente:** Prof. Carlos Henrique Veríssimo Pereira  
+**Equipe 17:** Nathan Campos Nagano (RA 0020482511012) & Matheus Guides Rubim Fonseca (RA 0020482511028)  
 
-## Estrutura Dimensional Planejada
-- **Tabela Fato**:
-  - `Fato_Vagas`: Registros granulares de cada anúncio de vaga (salário ofertado, data de publicação, modalidade presencial/híbrida/remota).
-- **Tabelas Dimensão**:
-  - `Dim_Cargo`: Níveis de senioridade (Estágio, Júnior, Pleno, Sênior) e nomenclaturas de cargos.
-  - `Dim_Tecnologia`: Catálogo padronizado de hard skills e tecnologias exigidas.
-  - `Dim_Empresa`: Informações da empresa anunciante e segmento.
-  - `Dim_Calendario`: Tabela contínua de datas para análises temporais.
+---
 
-## Indicadores Chave Iniciais (DAX)
-- **Média de Tecnologias Exigidas**: Contagem distinta de habilidades requeridas por nível hierárquico (evidenciando a anomalia do "Falso Júnior").
-- **Ticket Salarial Médio**: Média salarial consolidada em BRL por cargo e localização.
-- **Taxa de Requisitos Inflacionados**: Percentual de vagas de entrada que exigem mais de 4 hard skills complexas.
+## 📌 Objetivo da Etapa 3
+Estruturar o modelo relacional analítico em Esquema Estrela (*Star Schema*) no Power Pivot, relacionando tabelas fato e dimensões via cardinalidades 1:N com direção unidirecional, integrando uma dimensão temporal contínua (`dCalendario`) e calculando KPIs de inteligência de negócios através de medidas DAX formais.
+
+---
+
+## 📂 Arquivos Entregues
+
+1. **`Recrutamento_03_PowerPivot.xlsx`** *(Projeto Próprio — Equipe 17)*
+   - Modelo dimensional: `fVagas` no centro, conectada a `dCargo`, `dTecnologia`, `dEmpresa` e `dCalendario`.
+   - `dCalendario` contínua de 181 dias (01/01/2026 a 30/06/2026).
+   - Aba `Validacao_Recrutamento` com Tabelas Dinâmicas cruzadas comprovando os indicadores analíticos.
+
+2. **`CafeData_03_PowerPivot.xlsx`** *(Gabarito Oficial Benchmark — CaféData Brasil)*
+   - Modelo estrela oficial com `fVendas`, `dProduto`, `dFilial`, `fMetas` e `dCalendario`.
+   - Aba `Validacao` com validação de faturamento por categoria, filial e mês contra metas.
+
+3. **`dax/`** *(Scripts formais das Medidas DAX)*
+   - `medidas_recrutamento.dax`: Medidas analíticas do projeto:
+     - `Total de Vagas`: `COUNTROWS(fVagas)`
+     - `Ticket Salarial Médio`: `AVERAGE(fVagas[Salario_Oferecido])`
+     - `Média de Tecnologias Exigidas`: `AVERAGE(fVagas[Qtd_Tecnologias_Exigidas])`
+     - `Vagas Falso Júnior`: `CALCULATE(COUNTROWS(fVagas), fVagas[Status_Falso_Junior] = "Falso Júnior")`
+     - `% Vagas Falso Júnior`: `DIVIDE([Vagas Falso Júnior], [Total de Vagas], 0)` *(Resultando em 54,5%)*
+     - `Salário Médio Falso Júnior`: `CALCULATE([Ticket Salarial Médio], fVagas[Status_Falso_Junior] = "Falso Júnior")`
+   - `medidas_preliminares.dax`: 7 medidas fundamentais + medidas avançadas oficiais do CaféData.
+
+4. **`scripts_m/`** *(Scripts M de apoio à carga do modelo)*
+   - `fVagas.m`, `fVagas.pq`, `fVendas.m`, `fVendas.pq`, `fMetas.m`, `fMetas.pq`.
+
+---
+
+## 📐 Relacionamentos e Cardinalidades
+
+| Tabela 1 (Dimensão - Lado 1) | Chave Primária | Tabela 2 (Fato - Lado N) | Chave Estrangeira | Cardinalidade | Direção do Filtro |
+| :--- | :--- | :--- | :--- | :---: | :---: |
+| `dCargo` | `Cod_Cargo` | `fVagas` | `Cod_Cargo` | 1:N | Única (dCargo → fVagas) |
+| `dTecnologia` | `Cod_Tecnologia` | `fVagas` | `Cod_Tecnologia` | 1:N | Única (dTecnologia → fVagas) |
+| `dEmpresa` | `Cod_Empresa` | `fVagas` | `Cod_Empresa` | 1:N | Única (dEmpresa → fVagas) |
+| `dCalendario` | `Data` | `fVagas` | `Data_Anuncio` | 1:N | Única (dCalendario → fVagas) |
