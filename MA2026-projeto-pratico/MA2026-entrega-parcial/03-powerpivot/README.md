@@ -7,7 +7,7 @@
 ---
 
 ## 📌 Objetivo da Etapa 3
-Estruturar o modelo relacional analítico em Esquema Estrela (*Star Schema*) no Power Pivot, relacionando tabelas fato e dimensões via cardinalidades 1:N com direção unidirecional, integrando uma dimensão temporal contínua (`dCalendario`) e calculando KPIs de inteligência de negócios através de medidas DAX formais.
+Estruturar o modelo relacional analítico em Esquema Estrela (*Star Schema*) no Power Pivot, relacionando tabelas fato e dimensões via cardinalidades 1:N com direção unidirecional, integrando uma dimensão temporal contínua (`dCalendario`) e calculando KPIs de inteligência de negócios através de medidas DAX formais sobre o mercado de trabalho em tecnologia.
 
 ---
 
@@ -18,11 +18,7 @@ Estruturar o modelo relacional analítico em Esquema Estrela (*Star Schema*) no 
    - `dCalendario` contínua de 181 dias (01/01/2026 a 30/06/2026).
    - Aba `Validacao_Recrutamento` com Tabelas Dinâmicas cruzadas comprovando os indicadores analíticos.
 
-2. **`CafeData_03_PowerPivot.xlsx`** *(Gabarito Oficial Benchmark — CaféData Brasil)*
-   - Modelo estrela oficial com `fVendas`, `dProduto`, `dFilial`, `fMetas` e `dCalendario`.
-   - Aba `Validacao` com validação de faturamento por categoria, filial e mês contra metas.
-
-3. **`dax/`** *(Scripts formais das Medidas DAX)*
+2. **`dax/`** *(Scripts formais das Medidas DAX)*
    - `medidas_recrutamento.dax`: Medidas analíticas do projeto:
      - `Total de Vagas`: `COUNTROWS(fVagas)`
      - `Ticket Salarial Médio`: `AVERAGE(fVagas[Salario_Oferecido])`
@@ -30,10 +26,9 @@ Estruturar o modelo relacional analítico em Esquema Estrela (*Star Schema*) no 
      - `Vagas Falso Júnior`: `CALCULATE(COUNTROWS(fVagas), fVagas[Status_Falso_Junior] = "Falso Júnior")`
      - `% Vagas Falso Júnior`: `DIVIDE([Vagas Falso Júnior], [Total de Vagas], 0)` *(Resultando em 54,5%)*
      - `Salário Médio Falso Júnior`: `CALCULATE([Ticket Salarial Médio], fVagas[Status_Falso_Junior] = "Falso Júnior")`
-   - `medidas_preliminares.dax`: 7 medidas fundamentais + medidas avançadas oficiais do CaféData.
 
-4. **`scripts_m/`** *(Scripts M de apoio à carga do modelo)*
-   - `fVagas.m`, `fVagas.pq`, `fVendas.m`, `fVendas.pq`, `fMetas.m`, `fMetas.pq`.
+3. **`scripts_m/`** *(Scripts M de apoio à carga do modelo)*
+   - `fVagas.m`, `fVagas.pq`.
 
 ---
 

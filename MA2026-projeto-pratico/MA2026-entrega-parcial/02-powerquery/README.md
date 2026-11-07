@@ -7,7 +7,7 @@
 ---
 
 ## 📌 Objetivo da Etapa 2
-Automatizar a ingestão, limpeza, transformação e separação dimensional de dados por meio do Power Query (Linguagem M). As regras manuais da Etapa 1 são transformadas em um fluxo contínuo e repetível, com isolamento estrito de exceções na tabela `Rejeitados`.
+Automatizar a ingestão, limpeza, transformação e separação dimensional de dados de vagas de tecnologia por meio do Power Query (Linguagem M). As regras manuais da Etapa 1 são transformadas em um fluxo contínuo e repetível, com isolamento estrito de exceções na tabela `Rejeitados`.
 
 ---
 
@@ -20,13 +20,8 @@ Automatizar a ingestão, limpeza, transformação e separação dimensional de d
      - `Rejeitados`: Tabela com as 9 linhas descartadas (datas inválidas, nulos, empresas não mapeadas) com respectivo motivo de rejeição.
      - `Conferencia`: Painel de conferência com conciliação exata: $Linhas_{Entrada} (20) = fVagas (11) + Rejeitados (9)$ — **Diferença = 0**.
 
-2. **`CafeData_02_PowerQuery.xlsx`** *(Gabarito Oficial Benchmark — CaféData Brasil)*
-   - Pipeline de ingestão consolidado com leitura automatizada das filiais (F01 e F02), tabela `fVendas`, dimensões `dProduto`, `dFilial`, `fMetas`, `Rejeitados` e painel `Conferencia`.
-
-3. **`scripts_m/`** *(Scripts em Linguagem M exportados)*
-   - `fVagas.m` e `fVagas.pq`: Pipeline de ingestão e transformação das vagas.
-   - `fVendas.m` e `fVendas.pq`: Ingestão de vendas e regras de tipagem com `pt-BR`.
-   - `fMetas.m` e `fMetas.pq`: Pipeline de unpivot e metas mensais.
+2. **`scripts_m/`** *(Scripts em Linguagem M exportados)*
+   - `fVagas.m` e `fVagas.pq`: Pipeline de ingestão e transformação das vagas de tecnologia.
 
 ---
 
