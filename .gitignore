@@ -1,0 +1,23 @@
+# Arquivos temporários e de bloqueio do Microsoft Office / Excel
+~$*
+*.tmp
+*.bak
+*.crdownload
+
+# Arquivos de sistema operacional
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Ambientes e editores
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+
+# Caches de scripts (Python / Node)
+__pycache__/
+*.py[cod]
+node_modules/
